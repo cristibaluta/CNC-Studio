@@ -21,9 +21,10 @@ struct MetalView: NSViewRepresentable {
         }
 
         let view = MTKView()
-
         view.device = device
-        view.delegate = context.coordinator
+
+        let renderer = context.coordinator
+        renderer.attach(to: view)
 
         view.colorPixelFormat = .bgra8Unorm
 
@@ -35,6 +36,8 @@ struct MetalView: NSViewRepresentable {
         )
 
         view.preferredFramesPerSecond = 60
+        view.isPaused = true
+        view.enableSetNeedsDisplay = true
 
         // Mouse drag → orbit
         let pan = NSPanGestureRecognizer(
