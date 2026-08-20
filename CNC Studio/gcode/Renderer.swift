@@ -33,7 +33,11 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     // Distance used by the orthographic camera as well as
     // the camera's position relative to its target.
-    private var distance: Float = 6
+    private var cameraDistance: Float = 1000
+    private var zoom: Float = 100
+
+    private let minZoom: Float = 0.1
+    private let maxZoom: Float = 100_000
 
     // The point the camera is looking at.
     // Panning moves this point.
@@ -217,7 +221,7 @@ final class Renderer: NSObject, MTKViewDelegate {
             cosPitch * cos(yaw)
         )
 
-        return cameraTarget + direction * distance
+        return cameraTarget + direction * cameraDistance
     }
 
     private func viewMatrix() -> float4x4 {
@@ -237,7 +241,7 @@ final class Renderer: NSObject, MTKViewDelegate {
             viewportSize.x /
             max(viewportSize.y, 1)
 
-        let height = Float(distance)
+        let height = zoom
         let width = height * aspect
 
         return float4x4(
@@ -245,8 +249,8 @@ final class Renderer: NSObject, MTKViewDelegate {
             right: width / 2,
             bottom: -height / 2,
             top: height / 2,
-            nearZ: -100,
-            farZ: 100
+            nearZ: -100_000,
+            farZ: 100_000
         )
     }
 
@@ -315,7 +319,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         //
         // This makes dragging feel consistent at different
         // zoom levels.
-        let panScale = distance * 0.002
+        let panScale = zoom * 0.002
 
         // Dragging right moves the scene right.
         // Dragging down moves the scene down.
@@ -391,11 +395,11 @@ final class Renderer: NSObject, MTKViewDelegate {
             let amount =
                 Float(gesture.magnification)
 
-            distance *= 1 - amount
+            zoom *= 1 - amount
 
-            distance = max(
-                0.1,
-                min(10000, distance)
+            zoom = max(
+                minZoom,
+                min(maxZoom, zoom)
             )
 
             gesture.magnification = 0
@@ -411,29 +415,7 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         let position = cameraPosition()
 
-        print("""
-        Camera
-        ─────────────────────
-        target:
-          x: \(cameraTarget.x)
-          y: \(cameraTarget.y)
-          z: \(cameraTarget.z)
-
-        position:
-          x: \(position.x)
-          y: \(position.y)
-          z: \(position.z)
-
-        distance:
-          \(distance)
-
-        yaw:
-          \(yaw)
-
-        pitch:
-          \(pitch)
-        ─────────────────────
-        """)
+        print("Camera target: x: \(cameraTarget.x) y: \(cameraTarget.y) z: \(cameraTarget.z)   position: x: \(position.x) y: \(position.y) z: \(position.z)   camera distance: \(cameraDistance) mm   zoom: \(zoom) mm visible   yaw: \(yaw)   pitch: \(pitch)")
     }
 
     // MARK: MTKViewDelegate
