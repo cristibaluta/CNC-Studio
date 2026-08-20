@@ -21,9 +21,9 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     // MARK: Camera
 
-    var yaw: Float = -.pi * 0.25
-    var pitch: Float = -0.45
-    var distance: Float = 6.0
+    var yaw: Float = 0
+    var pitch: Float = 0.3
+    var distance: Float = 6
 
     private var lastPanTranslation = CGPoint.zero
 
@@ -47,44 +47,20 @@ final class Renderer: NSObject, MTKViewDelegate {
         let randomLineStart = SIMD3<Float>(0, 0, 0)
         let randomLineEnd = SIMD3<Float>(5, 5, 5)
 
-        // Axis lines + arrowheads
-        let axisSize: Float = 3.0
-        let arrowSize: Float = 0.25
-
+        
         let vertices: [SIMD3<Float>] = [
 
             // X axis
             SIMD3<Float>(0, 0, 0),
-            SIMD3<Float>(axisSize, 0, 0),
-
-            // X arrowhead
-            SIMD3<Float>(axisSize, 0, 0),
-            SIMD3<Float>(axisSize - arrowSize,  arrowSize, 0),
-
-            SIMD3<Float>(axisSize, 0, 0),
-            SIMD3<Float>(axisSize - arrowSize, -arrowSize, 0),
+            SIMD3<Float>(3, 0, 0),
 
             // Y axis
             SIMD3<Float>(0, 0, 0),
-            SIMD3<Float>(0, axisSize, 0),
-
-            // Y arrowhead
-            SIMD3<Float>(0, axisSize, 0),
-            SIMD3<Float>(arrowSize, axisSize - arrowSize, 0),
-
-            SIMD3<Float>(0, axisSize, 0),
-            SIMD3<Float>(-arrowSize, axisSize - arrowSize, 0),
+            SIMD3<Float>(0, 3, 0),
 
             // Z axis
             SIMD3<Float>(0, 0, 0),
-            SIMD3<Float>(0, 0, axisSize),
-
-            // Z arrowhead
-            SIMD3<Float>(0, 0, axisSize),
-            SIMD3<Float>( arrowSize, 0, axisSize - arrowSize),
-
-            SIMD3<Float>(0, 0, axisSize),
-            SIMD3<Float>(-arrowSize, 0, axisSize - arrowSize),
+            SIMD3<Float>(0, 0, 3),
 
             // Random line
             randomLineStart,
@@ -140,14 +116,6 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     // MARK: Camera
 
-    private func viewMatrix() -> float4x4 {
-        return float4x4(
-            lookAt: cameraPosition(),
-            target: SIMD3<Float>(0, 0, 0),
-            up: SIMD3<Float>(0, 1, 0)
-        )
-    }
-
     private func cameraPosition() -> SIMD3<Float> {
 
         let x =
@@ -167,6 +135,17 @@ final class Renderer: NSObject, MTKViewDelegate {
         return SIMD3<Float>(x, y, z)
     }
 
+    private func viewMatrix() -> float4x4 {
+
+        let position = cameraPosition()
+
+        return float4x4(
+            lookAt: position,
+            target: SIMD3<Float>(0, 0, 0),
+            up: SIMD3<Float>(0, 1, 0)
+        )
+    }
+
     private func projectionMatrix() -> float4x4 {
 
         let aspect =
@@ -181,43 +160,34 @@ final class Renderer: NSObject, MTKViewDelegate {
         )
     }
 
-//    private func projectionMatrix() -> float4x4 {
-//        let aspect =
-//            viewportSize.x / max(viewportSize.y, 1)
-//
-//        let height: Float = 10
-//        let width = height * aspect
-//
-//        return float4x4(
-//            orthographicLeft: -width / 2,
-//            right: width / 2,
-//            bottom: -height / 2,
-//            top: height / 2,
-//            nearZ: 0.1,
-//            farZ: 100
-//        )
-//    }
-
     // MARK: Mouse orbit
 
     @objc
     func handlePan(
         _ gesture: NSPanGestureRecognizer
     ) {
-        let translation = gesture.translation(in: gesture.view)
+
+        let translation =
+            gesture.translation(in: gesture.view)
 
         if gesture.state == .began {
+
             lastPanTranslation = translation
+
             return
         }
 
-        let dx = Float(
-            translation.x - lastPanTranslation.x
-        )
+        let dx =
+            Float(
+                translation.x -
+                lastPanTranslation.x
+            )
 
-        let dy = Float(
-            translation.y - lastPanTranslation.y
-        )
+        let dy =
+            Float(
+                translation.y -
+                lastPanTranslation.y
+            )
 
         lastPanTranslation = translation
 
@@ -226,12 +196,11 @@ final class Renderer: NSObject, MTKViewDelegate {
         yaw -= dx * sensitivity
         pitch -= dy * sensitivity
 
+        // Don't allow the camera to flip over.
         pitch = max(
             -1.45,
             min(1.45, pitch)
         )
-
-        print("Camera: yaw:      \(yaw) pitch:    \(pitch) distance: \(distance)")
     }
 
     // MARK: Trackpad zoom
@@ -313,23 +282,33 @@ final class Renderer: NSObject, MTKViewDelegate {
             index: 0
         )
 
-        // X axis + arrowhead
-        drawLine(encoder: encoder, vertexStart: 0, color: SIMD4<Float>(1, 0, 0, 1))
-        drawLine(encoder: encoder, vertexStart: 2, color: SIMD4<Float>(1, 0, 0, 1))
-        drawLine(encoder: encoder, vertexStart: 4, color: SIMD4<Float>(1, 0, 0, 1))
+        // X — RED
+        drawLine(
+            encoder: encoder,
+            vertexStart: 0,
+            color: SIMD4<Float>(1, 0, 0, 1)
+        )
 
-        // Y axis + arrowhead
-        drawLine(encoder: encoder, vertexStart: 6, color: SIMD4<Float>(0, 1, 0, 1))
-        drawLine(encoder: encoder, vertexStart: 8, color: SIMD4<Float>(0, 1, 0, 1))
-        drawLine(encoder: encoder, vertexStart: 10, color: SIMD4<Float>(0, 1, 0, 1))
+        // Y — GREEN
+        drawLine(
+            encoder: encoder,
+            vertexStart: 2,
+            color: SIMD4<Float>(0, 1, 0, 1)
+        )
 
-        // Z axis + arrowhead
-        drawLine(encoder: encoder, vertexStart: 12, color: SIMD4<Float>(0, 0.4, 1, 1))
-        drawLine(encoder: encoder, vertexStart: 14, color: SIMD4<Float>(0, 0.4, 1, 1))
-        drawLine(encoder: encoder, vertexStart: 16, color: SIMD4<Float>(0, 0.4, 1, 1))
+        // Z — BLUE
+        drawLine(
+            encoder: encoder,
+            vertexStart: 4,
+            color: SIMD4<Float>(0, 0.4, 1, 1)
+        )
 
-        // Random line
-        drawLine(encoder: encoder, vertexStart: 18, color: SIMD4<Float>(1, 1, 1, 1))
+        // Random line — WHITE
+        drawLine(
+            encoder: encoder,
+            vertexStart: 6,
+            color: SIMD4<Float>(1, 1, 1, 1)
+        )
 
         encoder.endEncoding()
 
@@ -359,7 +338,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         )
     }
 }
-
 extension float4x4 {
 
     init(
@@ -438,48 +416,6 @@ extension float4x4 {
                 0,
                 -(2 * farZ * nearZ) / zRange,
                 0
-            )
-        )
-    }
-}
-
-extension float4x4 {
-
-    init(
-        orthographicLeft left: Float,
-        right: Float,
-        bottom: Float,
-        top: Float,
-        nearZ: Float,
-        farZ: Float
-    ) {
-        self.init(
-            SIMD4<Float>(
-                2 / (right - left),
-                0,
-                0,
-                0
-            ),
-
-            SIMD4<Float>(
-                0,
-                2 / (top - bottom),
-                0,
-                0
-            ),
-
-            SIMD4<Float>(
-                0,
-                0,
-                -2 / (farZ - nearZ),
-                0
-            ),
-
-            SIMD4<Float>(
-                -(right + left) / (right - left),
-                -(top + bottom) / (top - bottom),
-                -(farZ + nearZ) / (farZ - nearZ),
-                1
             )
         )
     }
