@@ -519,6 +519,7 @@ struct GCodeTableView: NSViewRepresentable {
         Coordinator(document: document)
     }
 
+    @MainActor
     final class Coordinator: NSObject, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate {
         var document: NCFileDocument
         weak var tableView: NSTableView?

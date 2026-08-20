@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct MakeraStudio_LiteApp: App {
+struct CNC_StudioApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

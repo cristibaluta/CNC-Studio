@@ -239,13 +239,11 @@ struct ToolChangeBuilder {
 }
 
 
-struct PercentageBuilder {
+struct PercentageBuilder: Sendable {
 
-    private let command: (Int) -> CNCCommand
+    private let command: @Sendable (Int) -> CNCCommand
 
-    init(
-        command: @escaping (Int) -> CNCCommand
-    ) {
+    init(command: @Sendable @escaping (Int) -> CNCCommand) {
         self.command = command
     }
 

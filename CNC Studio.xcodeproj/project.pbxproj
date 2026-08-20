@@ -11,13 +11,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		56CEA04D30356265008167CA /* MakeraStudio Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MakeraStudio Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56CEA04D30356265008167CA /* CNC Studio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CNC Studio.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		56CEA04F30356265008167CA /* MakeraStudio Lite */ = {
+		56CEA04F30356265008167CA /* CNC Studio */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "MakeraStudio Lite";
+			path = "CNC Studio";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +37,7 @@
 		56CEA04430356265008167CA = {
 			isa = PBXGroup;
 			children = (
-				56CEA04F30356265008167CA /* MakeraStudio Lite */,
+				56CEA04F30356265008167CA /* CNC Studio */,
 				56CEA04E30356265008167CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,7 +45,7 @@
 		56CEA04E30356265008167CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				56CEA04D30356265008167CA /* MakeraStudio Lite.app */,
+				56CEA04D30356265008167CA /* CNC Studio.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		56CEA04C30356265008167CA /* MakeraStudio Lite */ = {
+		56CEA04C30356265008167CA /* CNC Studio */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56CEA05930356266008167CA /* Build configuration list for PBXNativeTarget "MakeraStudio Lite" */;
+			buildConfigurationList = 56CEA05930356266008167CA /* Build configuration list for PBXNativeTarget "CNC Studio" */;
 			buildPhases = (
 				56CEA04930356265008167CA /* Sources */,
 				56CEA04A30356265008167CA /* Frameworks */,
@@ -66,14 +66,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				56CEA04F30356265008167CA /* MakeraStudio Lite */,
+				56CEA04F30356265008167CA /* CNC Studio */,
 			);
-			name = "MakeraStudio Lite";
+			name = "CNC Studio";
 			packageProductDependencies = (
 				56CEA0913035EC36008167CA /* OCCTSwift */,
 			);
 			productName = "MakeraStudio Lite";
-			productReference = 56CEA04D30356265008167CA /* MakeraStudio Lite.app */;
+			productReference = 56CEA04D30356265008167CA /* CNC Studio.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -92,7 +92,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 56CEA04830356265008167CA /* Build configuration list for PBXProject "MakeraStudio Lite" */;
+			buildConfigurationList = 56CEA04830356265008167CA /* Build configuration list for PBXProject "CNC Studio" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -109,7 +109,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				56CEA04C30356265008167CA /* MakeraStudio Lite */,
+				56CEA04C30356265008167CA /* CNC Studio */,
 			);
 		};
 /* End PBXProject section */
@@ -257,14 +257,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "MakeraStudio Lite/MakeraStudio_Lite.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "CNC Studio/CNC-Studio.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5NHDC5EV44;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Makera Studio needs local network access to find and control your Makera CNC machine.";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "CNC Studio needs local network access to find and control your Makera CNC machine.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -280,15 +281,15 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ro.imagin.MakeraStudio-Lite";
+				PRODUCT_BUNDLE_IDENTIFIER = "ro.imagin.cnc-studio";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "MakeraStudio Lite/cam/MakeraStudio Lite-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "CNC Studio/cam/CNC-Studio-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
@@ -300,14 +301,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "MakeraStudio Lite/MakeraStudio_Lite.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "CNC Studio/CNC-Studio.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5NHDC5EV44;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Makera Studio needs local network access to find and control your Makera CNC machine.";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "CNC Studio needs local network access to find and control your Makera CNC machine.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -323,14 +325,14 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ro.imagin.MakeraStudio-Lite";
+				PRODUCT_BUNDLE_IDENTIFIER = "ro.imagin.cnc-studio";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "MakeraStudio Lite/cam/MakeraStudio Lite-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "CNC Studio/cam/CNC-Studio-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
@@ -339,7 +341,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		56CEA04830356265008167CA /* Build configuration list for PBXProject "MakeraStudio Lite" */ = {
+		56CEA04830356265008167CA /* Build configuration list for PBXProject "CNC Studio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56CEA05730356266008167CA /* Debug */,
@@ -348,7 +350,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56CEA05930356266008167CA /* Build configuration list for PBXNativeTarget "MakeraStudio Lite" */ = {
+		56CEA05930356266008167CA /* Build configuration list for PBXNativeTarget "CNC Studio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56CEA05A30356266008167CA /* Debug */,
