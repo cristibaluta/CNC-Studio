@@ -14,8 +14,8 @@
             filePath = "CNC Studio/gcode/Renderer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "459"
-            endingLineNumber = "459"
+            startingLineNumber = "424"
+            endingLineNumber = "424"
             landmarkName = "draw(in:)"
             landmarkType = "7">
          </BreakpointContent>

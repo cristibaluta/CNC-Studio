@@ -22,7 +22,7 @@ final class Renderer: NSObject, MTKViewDelegate {
     // MARK: Camera
 
     private var cameraRotation = simd_quatf(
-        angle: Float.pi * 0.25,
+        angle: 0,
         axis: SIMD3<Float>(0, 1, 0)
     )
     private var distance: Float = 6
@@ -205,91 +205,56 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     private func viewMatrix() -> float4x4 {
 
-        let position = cameraPosition()
+        let eye = cameraPosition()
 
-        let forward = cameraRotation.act(
-            SIMD3<Float>(0, 0, -1)
+        let target = SIMD3<Float>(
+            0,
+            0,
+            0
         )
 
-        let up = cameraRotation.act(
-            SIMD3<Float>(0, 1, 0)
-        )
-
-        let right = cameraRotation.act(
-            SIMD3<Float>(1, 0, 0)
+        let up = SIMD3<Float>(
+            0,
+            1,
+            0
         )
 
         return float4x4(
-            SIMD4<Float>(
-                right.x,
-                up.x,
-                -forward.x,
-                0
-            ),
-
-            SIMD4<Float>(
-                right.y,
-                up.y,
-                -forward.y,
-                0
-            ),
-
-            SIMD4<Float>(
-                right.z,
-                up.z,
-                -forward.z,
-                0
-            ),
-
-            SIMD4<Float>(
-                -simd_dot(right, position),
-                -simd_dot(up, position),
-                simd_dot(forward, position),
-                1
-            )
+            lookAt: eye,
+            target: target,
+            up: up
         )
     }
 
     private func cameraPosition() -> SIMD3<Float> {
 
-        // Camera starts looking toward -Z.
-        let defaultPosition = SIMD3<Float>(
-            0,
-            0,
+        let basePosition = SIMD3<Float>(
+            distance,
+            distance,
             distance
         )
 
-        return cameraRotation.act(defaultPosition)
+        return cameraRotation.act(basePosition)
     }
 
     private func projectionMatrix() -> float4x4 {
+
         let aspect =
-            viewportSize.x / max(viewportSize.y, 1)
+            viewportSize.x /
+            max(viewportSize.y, 1)
+
+        let height = Float(distance)
+        let width = height * aspect
 
         return float4x4(
-            perspectiveFov: 45 * .pi / 180,
-            aspect: aspect,
-            nearZ: 0.1,
+            orthographicLeft: -width / 2,
+            right: width / 2,
+            bottom: -height / 2,
+            top: height / 2,
+            nearZ: -100,
             farZ: 100
         )
     }
-
-//    private func projectionMatrix() -> float4x4 {
-//        let aspect =
-//            viewportSize.x / max(viewportSize.y, 1)
-//
-//        let height: Float = 10
-//        let width = height * aspect
-//
-//        return float4x4(
-//            orthographicLeft: -width / 2,
-//            right: width / 2,
-//            bottom: -height / 2,
-//            top: height / 2,
-//            nearZ: 0.1,
-//            farZ: 100
-//        )
-//    }
 
     // MARK: Mouse orbit
 
@@ -631,6 +596,20 @@ extension float4x4 {
                 -(farZ + nearZ) / (farZ - nearZ),
                 1
             )
+        )
+    }
+}
+
+extension float4x4 {
+
+    init(translation: SIMD3<Float>) {
+        self = matrix_identity_float4x4
+
+        columns.3 = SIMD4<Float>(
+            translation.x,
+            translation.y,
+            translation.z,
+            1
         )
     }
 }
