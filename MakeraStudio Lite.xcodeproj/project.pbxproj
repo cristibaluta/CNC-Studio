@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		56CEA0923035EC36008167CA /* OCCTSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 56CEA0913035EC36008167CA /* OCCTSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		56CEA04D30356265008167CA /* MakeraStudio Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MakeraStudio Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56CEA0923035EC36008167CA /* OCCTSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = "MakeraStudio Lite";
 			packageProductDependencies = (
+				56CEA0913035EC36008167CA /* OCCTSwift */,
 			);
 			productName = "MakeraStudio Lite";
 			productReference = 56CEA04D30356265008167CA /* MakeraStudio Lite.app */;
@@ -82,6 +88,7 @@
 				TargetAttributes = {
 					56CEA04C30356265008167CA = {
 						CreatedOnToolsVersion = 16.4;
+						LastSwiftMigration = 1640;
 					};
 				};
 			};
@@ -94,6 +101,9 @@
 			);
 			mainGroup = 56CEA04430356265008167CA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 56CEA04E30356265008167CA /* Products */;
 			projectDirPath = "";
@@ -246,6 +256,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "MakeraStudio Lite/MakeraStudio_Lite.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -253,6 +264,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Makera Studio needs local network access to find and control your Makera CNC machine.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -274,6 +286,8 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MakeraStudio Lite/cam/MakeraStudio Lite-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -285,6 +299,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "MakeraStudio Lite/MakeraStudio_Lite.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -292,6 +307,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Makera Studio needs local network access to find and control your Makera CNC machine.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -313,6 +329,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MakeraStudio Lite/cam/MakeraStudio Lite-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -341,6 +358,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SecondMouseAU/OCCTSwift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		56CEA0913035EC36008167CA /* OCCTSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */;
+			productName = OCCTSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 56CEA04530356265008167CA /* Project object */;
 }

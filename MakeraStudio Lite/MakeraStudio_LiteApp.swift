@@ -13,5 +13,6 @@ struct MakeraStudio_LiteApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowResizability(.contentSize)
     }
 }
