@@ -29,17 +29,22 @@ struct NCFileViewerView: View {
             if document.lines.isEmpty {
                 emptyState
             } else {
-                HStack(spacing: 0) {
-                    toolpathSidebar
-                        .frame(minWidth: 230, idealWidth: 270, maxWidth: 340)
+                VStack {
+                    MetalView()
+                        .frame(height: 600)
 
-                    Divider()
+                    HStack(spacing: 0) {
+                        toolpathSidebar
+                            .frame(minWidth: 230, idealWidth: 270, maxWidth: 340)
 
-                    GCodeTableView(
-                        document: document,
-                        highlightedLine: highlightedLine,
-                        requestedLine: requestedLine
-                    )
+                        Divider()
+
+                        GCodeTableView(
+                            document: document,
+                            highlightedLine: highlightedLine,
+                            requestedLine: requestedLine
+                        )
+                    }
                 }
             }
         }
