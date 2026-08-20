@@ -15,44 +15,26 @@ final class Renderer: NSObject, MTKViewDelegate {
     private let commandQueue: MTLCommandQueue
     private let pipelineState: MTLRenderPipelineState
 
-    private let vertexBuffer: MTLBuffer
+    private var vertexBuffer: MTLBuffer?
 
     private var viewportSize = SIMD2<Float>(1, 1)
 
     // MARK: Camera
 
-    var yaw: Float = -.pi * 0.25
-    var pitch: Float = -0.45
-    var distance: Float = 6.0
+    private var cameraRotation = simd_quatf(
+        angle: Float.pi * 0.25,
+        axis: SIMD3<Float>(0, 1, 0)
+    )
+    private var distance: Float = 6
 
     private var lastPanTranslation = CGPoint.zero
 
-    // MARK: Init
-
-    override init() {
-
-        guard let device = MTLCreateSystemDefaultDevice(),
-              let commandQueue = device.makeCommandQueue()
-        else {
-            fatalError("Could not create Metal device")
-        }
-
-        self.device = device
-        self.commandQueue = commandQueue
-
-        // ---------------------------------------------------------
-        // Geometry
-        // ---------------------------------------------------------
-
-        let randomLineStart = SIMD3<Float>(0, 0, 0)
-        let randomLineEnd = SIMD3<Float>(5, 5, 5)
-
+    private var axisVertices: [SIMD3<Float>] {
         // Axis lines + arrowheads
         let axisSize: Float = 3.0
         let arrowSize: Float = 0.25
 
         let vertices: [SIMD3<Float>] = [
-
             // X axis
             SIMD3<Float>(0, 0, 0),
             SIMD3<Float>(axisSize, 0, 0),
@@ -85,21 +67,85 @@ final class Renderer: NSObject, MTKViewDelegate {
 
             SIMD3<Float>(0, 0, axisSize),
             SIMD3<Float>(-arrowSize, 0, axisSize - arrowSize),
-
-            // Random line
-            randomLineStart,
-            randomLineEnd
         ]
 
-        guard let buffer = device.makeBuffer(
-            bytes: vertices,
-            length: MemoryLayout<SIMD3<Float>>.stride * vertices.count,
-            options: []
-        ) else {
-            fatalError("Could not create vertex buffer")
+        return vertices
+    }
+
+    private var cubeVertices: [SIMD3<Float>] {
+
+        let size: Float = 2.0
+        let h = size / 2
+
+        let vertices: [SIMD3<Float>] = [
+            // ---------------------------------------------------------
+            // Cube
+            //
+            // Bottom:
+            // 0 ───── 1
+            // │       │
+            // 3 ───── 2
+            //
+            // Top:
+            // 4 ───── 5
+            // │       │
+            // 7 ───── 6
+            // ---------------------------------------------------------
+
+            // Bottom face
+            SIMD3<Float>(-h, -h, -h),
+            SIMD3<Float>( h, -h, -h),
+
+            SIMD3<Float>( h, -h, -h),
+            SIMD3<Float>( h, -h,  h),
+
+            SIMD3<Float>( h, -h,  h),
+            SIMD3<Float>(-h, -h,  h),
+
+            SIMD3<Float>(-h, -h,  h),
+            SIMD3<Float>(-h, -h, -h),
+
+            // Top face
+            SIMD3<Float>(-h,  h, -h),
+            SIMD3<Float>( h,  h, -h),
+
+            SIMD3<Float>( h,  h, -h),
+            SIMD3<Float>( h,  h,  h),
+
+            SIMD3<Float>( h,  h,  h),
+            SIMD3<Float>(-h,  h,  h),
+
+            SIMD3<Float>(-h,  h,  h),
+            SIMD3<Float>(-h,  h, -h),
+
+            // Vertical edges
+            SIMD3<Float>(-h, -h, -h),
+            SIMD3<Float>(-h,  h, -h),
+
+            SIMD3<Float>( h, -h, -h),
+            SIMD3<Float>( h,  h, -h),
+
+            SIMD3<Float>( h, -h,  h),
+            SIMD3<Float>( h,  h,  h),
+
+            SIMD3<Float>(-h, -h,  h),
+            SIMD3<Float>(-h,  h,  h)
+        ]
+
+        return vertices
+    }
+
+    // MARK: Init
+
+    override init() {
+        guard let device = MTLCreateSystemDefaultDevice(),
+              let commandQueue = device.makeCommandQueue()
+        else {
+            fatalError("Could not create Metal device")
         }
 
-        self.vertexBuffer = buffer
+        self.device = device
+        self.commandQueue = commandQueue
 
         // ---------------------------------------------------------
         // Metal pipeline
@@ -136,30 +182,42 @@ final class Renderer: NSObject, MTKViewDelegate {
         }
 
         super.init()
+
+
+        // ---------------------------------------------------------
+        // Geometry
+        // ---------------------------------------------------------
+
+        let vertices: [SIMD3<Float>] = axisVertices + cubeVertices
+
+        guard let buffer = device.makeBuffer(
+            bytes: vertices,
+            length: MemoryLayout<SIMD3<Float>>.stride * vertices.count,
+            options: []
+        ) else {
+            fatalError("Could not create vertex buffer")
+        }
+
+        self.vertexBuffer = buffer
     }
 
     // MARK: Camera
 
-//    private func viewMatrix() -> float4x4 {
-//        return float4x4(
-//            lookAt: cameraPosition(),
-//            target: SIMD3<Float>(0, 0, 0),
-//            up: SIMD3<Float>(0, 1, 0)
-//        )
-//    }
     private func viewMatrix() -> float4x4 {
+
         let position = cameraPosition()
-        let target = SIMD3<Float>(0, 0, 0)
 
-        let forward = simd_normalize(target - position)
-
-        let worldUp = SIMD3<Float>(0, 1, 0)
-
-        let right = simd_normalize(
-            simd_cross(forward, worldUp)
+        let forward = cameraRotation.act(
+            SIMD3<Float>(0, 0, -1)
         )
 
-        let up = simd_cross(right, forward)
+        let up = cameraRotation.act(
+            SIMD3<Float>(0, 1, 0)
+        )
+
+        let right = cameraRotation.act(
+            SIMD3<Float>(1, 0, 0)
+        )
 
         return float4x4(
             SIMD4<Float>(
@@ -168,18 +226,21 @@ final class Renderer: NSObject, MTKViewDelegate {
                 -forward.x,
                 0
             ),
+
             SIMD4<Float>(
                 right.y,
                 up.y,
                 -forward.y,
                 0
             ),
+
             SIMD4<Float>(
                 right.z,
                 up.z,
                 -forward.z,
                 0
             ),
+
             SIMD4<Float>(
                 -simd_dot(right, position),
                 -simd_dot(up, position),
@@ -190,21 +251,23 @@ final class Renderer: NSObject, MTKViewDelegate {
     }
 
     private func cameraPosition() -> SIMD3<Float> {
-        let x = distance * cos(pitch) * sin(yaw)
-        let y = distance * sin(pitch)
-        let z = distance * cos(pitch) * cos(yaw)
 
-        return SIMD3<Float>(x, y, z)
+        // Camera starts looking toward -Z.
+        let defaultPosition = SIMD3<Float>(
+            0,
+            0,
+            distance
+        )
+
+        return cameraRotation.act(defaultPosition)
     }
 
     private func projectionMatrix() -> float4x4 {
-
         let aspect =
-            viewportSize.x /
-            max(viewportSize.y, 1)
+            viewportSize.x / max(viewportSize.y, 1)
 
         return float4x4(
-            perspectiveFov: Float.pi / 3,
+            perspectiveFov: 45 * .pi / 180,
             aspect: aspect,
             nearZ: 0.1,
             farZ: 100
@@ -234,7 +297,9 @@ final class Renderer: NSObject, MTKViewDelegate {
     func handlePan(
         _ gesture: NSPanGestureRecognizer
     ) {
-        let translation = gesture.translation(in: gesture.view)
+
+        let translation =
+            gesture.translation(in: gesture.view)
 
         if gesture.state == .began {
             lastPanTranslation = translation
@@ -242,26 +307,46 @@ final class Renderer: NSObject, MTKViewDelegate {
         }
 
         let dx = Float(
-            translation.x - lastPanTranslation.x
+            translation.x -
+            lastPanTranslation.x
         )
 
         let dy = Float(
-            translation.y - lastPanTranslation.y
+            translation.y -
+            lastPanTranslation.y
         )
 
         lastPanTranslation = translation
 
         let sensitivity: Float = 0.008
 
-        yaw -= dx * sensitivity
-        pitch -= dy * sensitivity
-
-        pitch = max(
-            -1.45,
-            min(1.45, pitch)
+        // Horizontal rotation around world Y.
+        let yawRotation = simd_quatf(
+            angle: -dx * sensitivity,
+            axis: SIMD3<Float>(0, 1, 0)
         )
 
-        print("Camera: yaw:      \(yaw) pitch:    \(pitch) distance: \(distance)")
+        // Vertical rotation around the camera's local X axis.
+        let cameraRight =
+            cameraRotation.act(
+                SIMD3<Float>(1, 0, 0)
+            )
+
+        let pitchRotation = simd_quatf(
+            angle: -dy * sensitivity,
+            axis: cameraRight
+        )
+
+        // Apply both rotations.
+        cameraRotation =
+            yawRotation *
+            pitchRotation *
+            cameraRotation
+
+        cameraRotation =
+            simd_normalize(cameraRotation)
+
+        printCamera()
     }
 
     // MARK: Trackpad zoom
@@ -271,11 +356,10 @@ final class Renderer: NSObject, MTKViewDelegate {
         _ gesture: NSMagnificationGestureRecognizer
     ) {
 
-        let amount = Float(
-            gesture.magnification
-        )
-
         if gesture.state == .changed {
+
+            let amount =
+                Float(gesture.magnification)
 
             distance *= 1 - amount
 
@@ -285,7 +369,35 @@ final class Renderer: NSObject, MTKViewDelegate {
             )
 
             gesture.magnification = 0
+
+            printCamera()
         }
+    }
+
+    private func printCamera() {
+
+        let position = cameraPosition()
+
+        print("""
+        
+        Camera
+        ─────────────────────
+        position:
+          x: \(position.x)
+          y: \(position.y)
+          z: \(position.z)
+
+        distance:
+          \(distance)
+
+        quaternion:
+          x: \(cameraRotation.imag.x)
+          y: \(cameraRotation.imag.y)
+          z: \(cameraRotation.imag.z)
+          w: \(cameraRotation.real)
+
+        ─────────────────────
+        """)
     }
 
     // MARK: MTKViewDelegate
@@ -358,8 +470,16 @@ final class Renderer: NSObject, MTKViewDelegate {
         drawLine(encoder: encoder, vertexStart: 14, color: SIMD4<Float>(0, 0.4, 1, 1))
         drawLine(encoder: encoder, vertexStart: 16, color: SIMD4<Float>(0, 0.4, 1, 1))
 
-        // Random line
-        drawLine(encoder: encoder, vertexStart: 18, color: SIMD4<Float>(1, 1, 1, 1))
+        // Cube
+        let cubeColor = SIMD4<Float>(1, 1, 1, 1)
+
+        for i in stride(from: 18, to: 42, by: 2) {
+            drawLine(
+                encoder: encoder,
+                vertexStart: i,
+                color: cubeColor
+            )
+        }
 
         encoder.endEncoding()
 
