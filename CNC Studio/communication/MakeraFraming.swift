@@ -1,3 +1,10 @@
+//
+//  MakeraMachine.swift
+//  CNC Studio
+//
+//  Created by Cristian Baluta on 20.08.2026.
+//
+
 import Foundation
 
 /// Makera's binary framed wire protocol.

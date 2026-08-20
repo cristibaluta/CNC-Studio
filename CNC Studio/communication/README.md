@@ -1,7 +1,4 @@
-# MakeraStudio Lite
-
-A minimal SwiftUI macOS app that listens for the UDP broadcast Makera
-machines send on port 3333, and lists them as they're found.
+Listens for the UDP broadcast Makera machines send on port 3333, and lists them as they're found.
 
 Protocol reverse-engineered from `Carvera_Controller`'s
 `carveracontroller/WIFIStream.py` — the firmware broadcasts a UDP packet
@@ -12,12 +9,6 @@ MachineName,192.168.1.42,2222,0
 ```
 
 (name, ip, tcp port for the command connection, busy flag)
-
-## Running it
-
-Build and run (⌘R). On first launch, macOS should prompt for local network
-permission — accept it. If your Makera is powered on and on the same
-network as your Mac, it should appear in the list within ~1-3 seconds.
 
 ## Troubleshooting
 
