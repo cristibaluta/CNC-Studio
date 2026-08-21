@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct CNC_StudioApp: App {
+
+    @State private var model = AppModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(model: model)
+//            STEPViewerView()
         }
         .windowResizability(.contentSize)
     }

@@ -69,49 +69,6 @@ extension CNCCommand {
                 z: z
             )
 
-        case .selectXYZPlane,
-             .selectXZYPlane,
-             .selectYZXPlane,
-             .inchMode,
-             .millimeterMode,
-             .clearancePosition,
-             .workspaceG54,
-             .absoluteMode,
-             .relativeMode,
-             .clearGlobalWorkspace,
-             .spindleOff,
-             .airflowOn,
-             .airflowOff,
-             .programEnd,
-             .spindleTemperature,
-             .enterLaserMode,
-             .exitLaserMode,
-             .enterLaserTestMode,
-             .exitLaserTestMode,
-             .automaticVacuumOn,
-             .automaticVacuumOff,
-             .clearBedLeveling,
-             .displayBedLevelingGrid,
-             .deviceMACAddress,
-             .deviceIPAddress,
-             .automaticToolChangerHome,
-             .tightenSpindleCollet,
-             .loosenSpindleCollet,
-             .calibrateTool,
-             .pause,
-             .internalVacuumOff,
-             .spindleCoolingFanOff,
-             .lightOn,
-             .lightOff,
-             .toolDetectorLaserOn,
-             .toolDetectorLaserOff,
-             .wirelessProbeChargingOn,
-             .wirelessProbeChargingOff,
-             .extendedPortOff,
-             .beepOn,
-             .beepOff:
-            return code
-
         case let .probeGrid(r, x, y, a, b, i, j, h):
             var result =
                 "\(code)" +
@@ -192,6 +149,10 @@ extension CNCCommand {
 
         case let .extendedPortOn(percent):
             return "\(code) S\(percent)"
+
+        default:
+            return code
+
         }
     }
 }

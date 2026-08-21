@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5679E7B430389CC800B08A35 /* MeshIO in Frameworks */ = {isa = PBXBuildFile; productRef = 5679E7B330389CC800B08A35 /* MeshIO */; };
+		5679E7B630389CC800B08A35 /* OCCTSwiftIO in Frameworks */ = {isa = PBXBuildFile; productRef = 5679E7B530389CC800B08A35 /* OCCTSwiftIO */; };
+		5679E7B930389D8B00B08A35 /* OCCTSwiftViewport in Frameworks */ = {isa = PBXBuildFile; productRef = 5679E7B830389D8B00B08A35 /* OCCTSwiftViewport */; };
+		5679E7BC30389DE400B08A35 /* OCCTSwiftTools in Frameworks */ = {isa = PBXBuildFile; productRef = 5679E7BB30389DE400B08A35 /* OCCTSwiftTools */; };
 		56CEA0923035EC36008167CA /* OCCTSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 56CEA0913035EC36008167CA /* OCCTSwift */; };
 /* End PBXBuildFile section */
 
@@ -18,7 +22,7 @@
 		56CEA0B130371425008167CA /* Exceptions for "CNC Studio" folder in "CNC Studio" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"gcode/float4x4+ext.swift",
+				"controller/gcode/float4x4+ext.swift",
 			);
 			target = 56CEA04C30356265008167CA /* CNC Studio */;
 		};
@@ -29,7 +33,7 @@
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 56CEA04B30356265008167CA /* Resources */;
 			membershipExceptions = (
-				"gcode/float4x4+ext.swift",
+				"controller/gcode/float4x4+ext.swift",
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -52,6 +56,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56CEA0923035EC36008167CA /* OCCTSwift in Frameworks */,
+				5679E7B430389CC800B08A35 /* MeshIO in Frameworks */,
+				5679E7BC30389DE400B08A35 /* OCCTSwiftTools in Frameworks */,
+				5679E7B630389CC800B08A35 /* OCCTSwiftIO in Frameworks */,
+				5679E7B930389D8B00B08A35 /* OCCTSwiftViewport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +103,10 @@
 			name = "CNC Studio";
 			packageProductDependencies = (
 				56CEA0913035EC36008167CA /* OCCTSwift */,
+				5679E7B330389CC800B08A35 /* MeshIO */,
+				5679E7B530389CC800B08A35 /* OCCTSwiftIO */,
+				5679E7B830389D8B00B08A35 /* OCCTSwiftViewport */,
+				5679E7BB30389DE400B08A35 /* OCCTSwiftTools */,
 			);
 			productName = "MakeraStudio Lite";
 			productReference = 56CEA04D30356265008167CA /* CNC Studio.app */;
@@ -127,6 +139,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */,
+				5679E7B230389CC800B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftIO" */,
+				5679E7B730389D8B00B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftViewport" */,
+				5679E7BA30389DE400B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftTools" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 56CEA04E30356265008167CA /* Products */;
@@ -386,6 +401,30 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5679E7B230389CC800B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftIO" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SecondMouseAU/OCCTSwiftIO.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		5679E7B730389D8B00B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftViewport" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SecondMouseAU/OCCTSwiftViewport.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		5679E7BA30389DE400B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftTools" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SecondMouseAU/OCCTSwiftTools.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SecondMouseAU/OCCTSwift.git";
@@ -397,6 +436,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5679E7B330389CC800B08A35 /* MeshIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5679E7B230389CC800B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftIO" */;
+			productName = MeshIO;
+		};
+		5679E7B530389CC800B08A35 /* OCCTSwiftIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5679E7B230389CC800B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftIO" */;
+			productName = OCCTSwiftIO;
+		};
+		5679E7B830389D8B00B08A35 /* OCCTSwiftViewport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5679E7B730389D8B00B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftViewport" */;
+			productName = OCCTSwiftViewport;
+		};
+		5679E7BB30389DE400B08A35 /* OCCTSwiftTools */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5679E7BA30389DE400B08A35 /* XCRemoteSwiftPackageReference "OCCTSwiftTools" */;
+			productName = OCCTSwiftTools;
+		};
 		56CEA0913035EC36008167CA /* OCCTSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 56CEA0903035EC36008167CA /* XCRemoteSwiftPackageReference "OCCTSwift" */;

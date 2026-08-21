@@ -16,7 +16,6 @@ struct MachineDetailView: View {
     @State private var commandHistory: [String] = []
     @State private var historyIndex: Int?
 
-    @State private var selectedJogStep: Double = 1.0
     @State private var selectedFeedOverride: Int = 100
     @State private var spindleRPM = "12000"
 
@@ -29,16 +28,32 @@ struct MachineDetailView: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            header
+        HStack(alignment: .top, spacing: 12) {
+//            header
+//
+//            Divider()
 
-            Divider()
+            toolpathView
 
-            mainContent
+            gCodeView
 
-            commandBar
+            VStack {
+                JogView() { x, y, z, a in
+                    sendCommand( CNC.rapidMove.with(x: x, y: y, z: z) )
+                }
+                .disabled(!connection.isConnected)
 
-            bottomControls
+//                leftControlPanel
+//
+
+                terminalPanel
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity
+                    )
+                commandBar
+            }
+            .frame(width: 280)
         }
         .padding(14)
         .frame(
@@ -174,26 +189,15 @@ struct MachineDetailView: View {
         }
     }
 
-    // MARK: - Main Content
+    // MARK: - G code view
 
-    private var mainContent: some View {
-        HStack(
-            alignment: .top,
-            spacing: 12
-        ) {
-            leftControlPanel
-                .frame(width: 280)
+    private var toolpathView: some View {
+        NCFileViewerView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
 
-            terminalPanel
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
-                )
-        }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
+    private var gCodeView: some View {
+        Text("G-CODE")
     }
 
     // MARK: - Left Control Panel
@@ -205,10 +209,6 @@ struct MachineDetailView: View {
                 spacing: 12
             ) {
                 positionPanel
-
-                Divider()
-
-                jogPanel
 
                 Divider()
 
@@ -297,145 +297,7 @@ struct MachineDetailView: View {
         }
     }
 
-    // MARK: - Jogging
-
-    private var jogPanel: some View {
-        GroupBox("Jog") {
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Step")
-                        .font(.caption)
-
-                    Spacer()
-
-                    Picker(
-                        "Step",
-                        selection: $selectedJogStep
-                    ) {
-                        Text("0.01 mm").tag(0.01)
-                        Text("0.1 mm").tag(0.1)
-                        Text("1 mm").tag(1.0)
-                        Text("10 mm").tag(10.0)
-                        Text("100 mm").tag(100.0)
-                    }
-                    .labelsHidden()
-                    .frame(width: 110)
-                }
-
-                HStack(spacing: 5) {
-                    Spacer()
-
-                    jogButton(
-                        "arrow.up",
-                        help: "Y+"
-                    ) {
-                        jog(y: selectedJogStep)
-                    }
-
-                    Spacer()
-                }
-
-                HStack(spacing: 5) {
-                    jogButton(
-                        "arrow.left",
-                        help: "X-"
-                    ) {
-                        jog(x: -selectedJogStep)
-                    }
-
-                    Button {
-                        sendCommand(
-                            CNC.rapidMove.with(
-                                x: 0,
-                                y: 0
-                            )
-                        )
-                    } label: {
-                        Image(systemName: "scope")
-                            .frame(
-                                width: 36,
-                                height: 30
-                            )
-                    }
-                    .help("Move X/Y to zero")
-                    .disabled(!connection.isConnected)
-
-                    jogButton(
-                        "arrow.right",
-                        help: "X+"
-                    ) {
-                        jog(x: selectedJogStep)
-                    }
-                }
-
-                HStack(spacing: 5) {
-                    Spacer()
-
-                    jogButton(
-                        "arrow.down",
-                        help: "Y-"
-                    ) {
-                        jog(y: -selectedJogStep)
-                    }
-
-                    Spacer()
-                }
-
-                Divider()
-
-                HStack {
-                    jogButton(
-                        "arrow.up.to.line",
-                        help: "Z+"
-                    ) {
-                        jog(z: selectedJogStep)
-                    }
-
-                    Text("Z")
-                        .font(.caption)
-                        .frame(maxWidth: .infinity)
-
-                    jogButton(
-                        "arrow.down.to.line",
-                        help: "Z-"
-                    ) {
-                        jog(z: -selectedJogStep)
-                    }
-                }
-            }
-            .padding(.vertical, 4)
-        }
-    }
-
-    private func jogButton(
-        _ systemName: String,
-        help: String,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .frame(
-                    minWidth: 36,
-                    minHeight: 30
-                )
-        }
-        .help(help)
-        .disabled(!connection.isConnected)
-    }
-
-    private func jog(
-        x: Double? = nil,
-        y: Double? = nil,
-        z: Double? = nil
-    ) {
-        sendCommand(
-            CNC.rapidMove.with(
-                x: x,
-                y: y,
-                z: z
-            )
-        )
-    }
+    
 
     // MARK: - Spindle
 
